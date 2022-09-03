@@ -17,6 +17,11 @@ public class GameManager : MonoBehaviour
     public InventoryUI InvenUI => inventoryUI;
     // ------------------------------------------------------------------------------------------
 
+    // Player 관련 테스트 ------------------------------------------------------------------------
+    private KKH_Player_Test player;
+    public KKH_Player_Test MainPlayer => player;
+    // ------------------------------------------------------------------------------------------
+
     // 게임 매니저의 인스턴스 생성
     static GameManager instance = null;
 
@@ -49,5 +54,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void Initialize()
     {
+        itemData = GetComponent<ItemDataManager>();
+
+        player = FindObjectOfType<KKH_Player_Test>();
+        inventoryUI = FindObjectOfType<InventoryUI>();
     }
 }

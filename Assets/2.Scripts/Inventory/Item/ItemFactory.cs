@@ -66,12 +66,9 @@ public class ItemFactory
     /// <param name="code">생성할 아이템</param>
     /// <param name="position">생성된 아이템의 위치</param>
     /// <param name="count">생성할 갯수</param>
-    public static void MakeItems(ItemIDCode code, Vector3 position, uint count)
+    public static void MakeItems(ItemIDCode code, Vector3 position)
     {
-        for (int i = 0; i < count; i++)
-        {
-            MakeItem(code, position, true);
-        }
+        MakeItem(code, position, true);
     }
 
     public static GameObject MakeItem(uint id)
@@ -86,6 +83,6 @@ public class ItemFactory
 
     public static void MakeItems(uint id, Vector3 position, uint count)
     {
-        MakeItems((ItemIDCode)id, position, count);
+        MakeItems((ItemIDCode)id, position);
     }
 }

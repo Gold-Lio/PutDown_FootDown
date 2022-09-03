@@ -66,38 +66,46 @@ public class InventoryUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     DetailInfoUI detail;
     public DetailInfoUI Detail => detail;
 
-    // 돈 UI --------------------------------------------------------------------------------------
-    /// <summary>
-    /// 돈 표시할 text
-    /// </summary>
-    TextMeshProUGUI goldText;
-
     // 델리게이트 ----------------------------------------------------------------------------------
     public Action OnInventoryOpen;
     public Action OnInventoryClose;
 
     private bool isMove = false;
 
+    private Player_Test_Input inputActions;
+
     // 유니티 이벤트 함수들 -------------------------------------------------------------------------
     private void Awake()
     {
         // 미리 찾아놓기
         canvasGroup = GetComponent<CanvasGroup>();
-        goldText = transform.Find("MoneyPanel").Find("Money").GetComponent<TextMeshProUGUI>();
         slotParent = transform.Find("Inventory_Base").Find("Grid Setting");
         tempItemSlotUI = GetComponentInChildren<TempItemSlotUI>();
         detail = GetComponentInChildren<DetailInfoUI>();
 
         Button closeButton = transform.Find("CloseButton").GetComponent<Button>();
         closeButton.onClick.AddListener(Close);
-    }
 
+        inputActions = new Player_Test_Input();
+    }
 
     private void Start()
     {
         //player = GameManager.Inst.MainPlayer;   // 게임 메니저에서 플레이어 가져오기
 
         Close();    // 시작할 때 무조건 닫기
+    }
+
+    private void OnEnable()
+    {
+        inputActions.ShortCut.Enable();
+        inputActions.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.UI.Disable();
+        inputActions.ShortCut.Disable();
     }
 
     // 일반 함수들 ---------------------------------------------------------------------------------
@@ -142,8 +150,7 @@ public class InventoryUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         tempItemSlotUI.Initialize(Inventory.TempSlotID, inven.TempSlot);    // TempItemSlotUI와 TempSlot 연결
         tempItemSlotUI.Close(); // tempItemSlotUI 닫은채로 시작하기
         
-        // 드랍 어떻게 처리하지...?
-        //inputActions.UI.ItemDrop.canceled += tempItemSlotUI.OnDrop;
+        inputActions.UI.ItemDrop.canceled += tempItemSlotUI.OnDrop;
 
         RefreshAllSlots();  // 전체 슬롯UI 갱신
     }
@@ -157,15 +164,6 @@ public class InventoryUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
         {
             slotUI.Refresh();
         }
-    }
-
-    /// <summary>
-    /// 플레이어가 가진 돈을 갱신
-    /// </summary>
-    /// <param name="money">표시될 금액</param>
-    private void RefreshMoney(int money)
-    {
-        goldText.text = $"{money:N0}";  // Money가 변경될 때 실행될 함수
     }
 
     /// <summary>
